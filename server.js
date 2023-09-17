@@ -1,46 +1,57 @@
-const http = require('http');
+const http = require("http")
+const {saveDataToTheFile} = require('./utilities')
 
+// create server 
 const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // stop cors 
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
 
 
-  if(req.method === 'OPTIONS'){
+  // stop cors origin 
+  if(req.method === "OPTIONS"){
     res.writeHead(200)
     res.end()
     return
   }
 
-  if (req.url === '/api/send-data' && req.method === 'POST') {
-    let body = '';
 
-    // Listen for data chunks in the request
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
+  // check req url 
+  if(req.url === '/api/send-data' && req.method === "POST"){
+    let body = ""
 
-    req.on('end', () => {
-      try {
-        const taskToEntry = JSON.parse(body);
-        console.log('Data from client:', taskToEntry);
+    // chunks 
+    req.on("data", (chunk) => {
+      body +=  chunk.toString()
+    })
 
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Data received successfully' }));
-      } catch (error) {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Invalid JSON data');
+    
+    
+    req.on("end", () => {
+      try{
+        const parsedObject = JSON.parse(body)
+        // console.log(parsedObject)
+        res.writeHead(200, {"Content-Type" : "application/json"})
+        res.end(JSON.stringify({message : "Successfully data recived"}))
+        saveDataToTheFile(parsedObject)
       }
-    });
-  } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Not Found');
+      
+      catch(error){
+        res.writeHead(400, {"Content-Type" : "text/plain"})
+        res.end("Error from server is",  error)
+      }
+    })
   }
-});
+
+
+})
 
 const port = 3000;
-const hsot = 'localhost';
+const host = "localhost";
 
-server.listen(port, hsot, () => {
-  console.log('Server is running');
-});
+// listen the server 
+server.listen(port, host, () => {
+  console.log("Server is running on port", port)
+})
