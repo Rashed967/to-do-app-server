@@ -1,39 +1,28 @@
-const { log } = require('console')
 const fs = require('fs')
 const path = require('path')
 
-// funciton to save data to the file 
-let toDoArray = [];
+let arraysOfObject = []
 
-function saveDataToTheFile(item){
-    // data dir path 
-    const dataDirPath = path.join(__dirname, 'data')
+// save data function 
+function saveToFile(item){
+    const dirPath =  path.join(__dirname, 'data')
 
-    // fileName 
-    const filename = 'data.json'
+    const fileName = 'data.json'
 
-    // join path 
-    const filePath = path.join(dataDirPath, filename)
+    const filePath = path.join(dirPath, fileName)
     
-    // push to array 
-    toDoArray.push(item)
-
-    // convert to json data 
-   const jsonData = JSON.stringify(toDoArray, null, 2)
-
-
-   try{
-    fs.writeFileSync(filePath, jsonData)
-    // console.log();
-   }
-
-   catch{
-        console.log("someThing is wrong");
-   }
-   
+    arraysOfObject.push(item)
     
-    
+    const josnData =  JSON.stringify(arraysOfObject, null, 2)
+    try{
+        fs.writeFileSync(filePath, josnData)
+    }
+
+    catch(error){
+        console.log("Someting is wrong")
+    }
+
 }
 
 
-module.exports = {saveDataToTheFile} 
+module.exports = {saveToFile}

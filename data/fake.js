@@ -6,11 +6,14 @@ const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
 
+
   if(req.method === 'OPTIONS'){
     res.writeHead(200)
     res.end()
     return
   }
+
+
 
   if (req.url === '/api/send-data' && req.method === 'POST') {
     let body = '';
