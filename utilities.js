@@ -25,4 +25,13 @@ function saveToFile(item){
 }
 
 
-module.exports = {saveToFile}
+function getDataFromServer(){
+     const dirPath = path.join(__dirname, 'data')
+     const filePath = path.join(dirPath, 'data.json')
+     const data = fs.readFileSync(filePath, 'utf8')
+     return JSON.parse(data)
+}
+
+
+
+module.exports = {saveToFile, getDataFromServer}

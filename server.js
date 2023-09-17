@@ -1,5 +1,6 @@
 const http = require('http')
-const {saveToFile} = require('./utilities')
+const {saveToFile, getDataFromServer} = require('./utilities');
+const { json } = require('react-router-dom');
 
 // create server 
 const server = http.createServer((req, res) => {
@@ -43,9 +44,10 @@ const server = http.createServer((req, res) => {
 
   }
 
-  else{
-    res.writeHead(404, {"Content-Type" : "text/plain"})
-    res.end("Data not found")
+  if(req.url === "/api/send-data" && req.method === "GET"){
+    const foundData = getDataFromServer()
+    res.writeHead(200, {"Content-Type" : "application/json"})
+    res.end(JSON.stringify(foundData))
   }
   
 
