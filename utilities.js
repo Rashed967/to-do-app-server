@@ -25,6 +25,8 @@ function saveToFile(item){
 }
 
 
+
+// get data from server 
 function getDataFromServer(){
      const dirPath = path.join(__dirname, 'data')
      const filePath = path.join(dirPath, 'data.json')
@@ -34,4 +36,18 @@ function getDataFromServer(){
 
 
 
-module.exports = {saveToFile, getDataFromServer}
+function deleteDataFromServer(id){
+    const dirPath = path.join(__dirname, 'data')
+    const filePath = path.join(dirPath, 'data.json')
+    let oldData = JSON.parse(fs.readFileSync(filePath))
+    const index = oldData.findIndex(e => e.id === id) 
+    
+    if(index !== -1 ){
+        oldData.splice(index, 1)
+        oldData = JSON.stringify(oldData, null, 2)
+        fs.writeFileSync(filePath, oldData)
+    }
+}
+
+
+module.exports = {saveToFile, getDataFromServer, deleteDataFromServer}

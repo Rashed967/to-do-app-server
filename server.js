@@ -1,6 +1,6 @@
 const http = require('http')
-const {saveToFile, getDataFromServer} = require('./utilities');
-const { json } = require('react-router-dom');
+const {saveToFile, getDataFromServer, deleteDataFromServer} = require('./utilities');
+
 
 // create server 
 const server = http.createServer((req, res) => {
@@ -44,10 +44,36 @@ const server = http.createServer((req, res) => {
 
   }
 
+  // get data from server 
   if(req.url === "/api/send-data" && req.method === "GET"){
     const foundData = getDataFromServer()
     res.writeHead(200, {"Content-Type" : "application/json"})
     res.end(JSON.stringify(foundData))
+  }
+
+
+  // delete data from server 
+  if(req.url === "/api/send-data" && req.method === "DELETE"){
+    let id = ""
+    req.on("data", chunk => {
+      id += chunk.toString()
+    })
+
+
+    
+    req.on("end", () => {
+      try{
+        const parsedId = Number(JSON.parse(id).id)
+        deleteDataFromServer(parsedId)
+        const newData = getDataFromServer()
+        res.writeHead(200, {"Content-Type" : "application/json"})
+        res.end(JSON.stringify(newData))
+      }
+      catch{
+        res.writeHead(404, {"Content-Type" : "text/plain"})
+        res.end("Data not deleted, something is wrong")
+      }
+    })
   }
   
 
