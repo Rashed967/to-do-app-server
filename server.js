@@ -31,7 +31,7 @@ const server = http.createServer((req, res) => {
    req.on("end", () => {
     try{
       const parsedObject = JSON.parse(body)
-      console.log(parsedObject);
+      // console.log(parsedObject);
       saveToFile(parsedObject)
       res.writeHead(200, {"Content-Type" : "application/json"})
       res.end(JSON.stringify({message : "Data recived successfully"}))
